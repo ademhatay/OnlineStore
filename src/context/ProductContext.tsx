@@ -63,6 +63,10 @@ export const ProductProvider: FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     const addToFavorites = async (product: Product) => {
+        // Duplicate check
+        if (favorites.some(fav => fav.id === product.id)) {
+            return;
+        }
         const newFavorites = [...favorites, product];
         setFavorites(newFavorites);
         await saveFavorites(newFavorites);

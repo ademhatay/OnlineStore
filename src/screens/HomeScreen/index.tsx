@@ -3,11 +3,10 @@ import { SafeAreaView, View, ActivityIndicator, Text, StyleSheet } from 'react-n
 import { useProducts } from '@/context/ProductContext';
 import { ProductList } from '@/components/Product';
 import { Product } from '@/types/Product';
+import { TabScreenProps } from '@/types/Navigation';
 import globalStyles from '@/styles';
 
-interface HomeScreenProps {
-    navigation: any;
-}
+type HomeScreenProps = TabScreenProps<'HomeTab'>;
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     const { products, isLoading, isError, selectProduct } = useProducts();

@@ -3,11 +3,10 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { useProducts } from '@/context/ProductContext';
 import { ProductList } from '@/components/Product';
 import { Product } from '@/types/Product';
+import { TabScreenProps } from '@/types/Navigation';
 import globalStyles from '@/styles';
 
-interface FavoritesScreenProps {
-    navigation: any;
-}
+type FavoritesScreenProps = TabScreenProps<'FavoritesTab'>;
 
 const FavoritesScreen: FC<FavoritesScreenProps> = ({ navigation }) => {
     const { favorites, selectProduct } = useProducts();

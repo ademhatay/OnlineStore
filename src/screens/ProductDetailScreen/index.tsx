@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useProducts } from '@/context/ProductContext';
+import { RootStackScreenProps } from '@/types/Navigation';
 import globalStyles from '@/styles';
 
-interface ProductDetailScreenProps {
-    navigation: any;
-}
+type ProductDetailScreenProps = RootStackScreenProps<'Detail'>;
 
 const ProductDetailScreen: FC<ProductDetailScreenProps> = ({ navigation }) => {
     const { selectedProduct, clearSelectedProduct, addToFavorites, removeFromFavorites, isFavorite } = useProducts();

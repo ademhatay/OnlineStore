@@ -6,9 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ProductProvider } from '@/context/ProductContext';
 import { HomeScreen, ProductDetailScreen, FavoritesScreen } from '@/screens';
+import { RootStackParamList, TabParamList } from '@/types/Navigation';
+import { ErrorBoundary } from '@/components/global';
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator = () => {
   return (
@@ -42,11 +44,12 @@ const TabNavigator = () => {
       <Tab.Screen 
         name="FavoritesTab" 
         component={FavoritesScreen}
-        options={{ 
+        options={({ }) => ({
           title: 'Favoriler',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>❤️</Text>,
-          headerTitle: 'Favorilerim'
-        }}
+          headerTitle: 'Favorilerim',
+          tabBarBadge: undefined, // Burayı context'ten alacağız
+        })}
       />
     </Tab.Navigator>
   );
@@ -57,7 +60,7 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-    <>
+    <ErrorBoundary>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <QueryClientProvider client={queryClient}>
         <ProductProvider>
@@ -77,7 +80,7 @@ function App() {
           </NavigationContainer>
         </ProductProvider>
       </QueryClientProvider>
-    </>
+    </ErrorBoundary>
   );
 }
 
