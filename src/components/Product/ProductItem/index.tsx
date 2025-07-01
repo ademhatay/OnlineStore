@@ -5,6 +5,7 @@ import { Text, StyleSheet, Dimensions, TouchableOpacity, View, Image } from 'rea
 interface ProductItemProps {
     item: Product;
     index: number;
+    onPress: (product: Product) => void;
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -12,16 +13,16 @@ const gap = 12;
 const horizontalPadding = 20;
 const itemWidth = (screenWidth - horizontalPadding - gap) / 2;
 
-const ProductItem: FC<ProductItemProps> = ({ item, index }) => {
+const ProductItem: FC<ProductItemProps> = ({ item, index, onPress }) => {
     const isLeftColumn = index % 2 === 0;
 
-    const handlePressItem = (productItem: Product) => {
-        console.log(productItem.title);
+    const handlePressItem = () => {
+        onPress(item);
     };
 
     return (
         <TouchableOpacity
-            onPress={() => handlePressItem(item)}
+            onPress={handlePressItem}
             style={[
                 styles.container,
                 isLeftColumn ? styles.leftColumn : styles.rightColumn

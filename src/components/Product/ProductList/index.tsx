@@ -6,14 +6,19 @@ import ProductItem from '../ProductItem';
 
 interface ProductListProps {
     products: Product[];
+    onProductPress: (product: Product) => void;
 }
 
-const ProductList: FC<ProductListProps> = ({ products }) => {
+const ProductList: FC<ProductListProps> = ({ products, onProductPress }) => {
     return (
         <FlashList
             data={products}
             renderItem={({ item, index }) => (
-                <ProductItem item={item} index={index} />
+                <ProductItem 
+                    item={item} 
+                    index={index}
+                    onPress={onProductPress}
+                />
             )}
             keyExtractor={(item) => item.id.toString()}
             numColumns={2}
