@@ -8,11 +8,21 @@ interface ProductDetailScreenProps {
 }
 
 const ProductDetailScreen: FC<ProductDetailScreenProps> = ({ navigation }) => {
-    const { selectedProduct, clearSelectedProduct } = useProducts();
+    const { selectedProduct, clearSelectedProduct, addToFavorites, removeFromFavorites, isFavorite } = useProducts();
 
     const handleGoBack = () => {
         clearSelectedProduct();
         navigation.goBack();
+    };
+
+    const handleFavoritePress = () => {
+        if (!selectedProduct) return;
+        
+        if (isFavorite(selectedProduct.id)) {
+            removeFromFavorites(selectedProduct.id);
+        } else {
+            addToFavorites(selectedProduct);
+        }
     };
 
     if (!selectedProduct) {
@@ -24,10 +34,22 @@ const ProductDetailScreen: FC<ProductDetailScreenProps> = ({ navigation }) => {
         );
     }
 
+    const isProductFavorite = isFavorite(selectedProduct.id);
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Image source={{ uri: selectedProduct.image }} style={styles.image} />
+                <View style={styles.imageContainer}>
+                    <Image source={{ uri: selectedProduct.image }} style={styles.image} />
+                    <TouchableOpacity 
+                        style={styles.favoriteButton}
+                        onPress={handleFavoritePress}
+                    >
+                        <Text style={styles.favoriteIcon}>
+                            {isProductFavorite ? '❤️' : '🤍'}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.infoContainer}>
                     <Text style={styles.title}>{selectedProduct.title}</Text>
                     <View style={styles.categoryContainer}>
@@ -40,6 +62,15 @@ const ProductDetailScreen: FC<ProductDetailScreenProps> = ({ navigation }) => {
                     </View>
                     <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
                     <Text style={styles.description}>{selectedProduct.description}</Text>
+                    
+                    <TouchableOpacity 
+                        style={[styles.actionButton, isProductFavorite ? styles.removeButton : styles.addButton]}
+                        onPress={handleFavoritePress}
+                    >
+                        <Text style={styles.actionButtonText}>
+                            {isProductFavorite ? '❤️ Favorilerden Çıkar' : '🤍 Favorilere Ekle'}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -61,11 +92,36 @@ const styles = StyleSheet.create({
     scrollContainer: {
         paddingBottom: 20,
     },
+    imageContainer: {
+        position: 'relative',
+    },
     image: {
         width: '100%',
         height: 300,
         resizeMode: 'contain',
         backgroundColor: 'white',
+    },
+    favoriteButton: {
+        position: 'absolute',
+        top: 15,
+        right: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        borderRadius: 25,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,
+    },
+    favoriteIcon: {
+        fontSize: 24,
     },
     infoContainer: {
         padding: 20,
@@ -108,6 +164,26 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: '#555',
+        marginBottom: 20,
+    },
+    actionButton: {
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+    },
+    addButton: {
+        backgroundColor: '#007bff',
+    },
+    removeButton: {
+        backgroundColor: '#dc3545',
+    },
+    actionButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });
 
